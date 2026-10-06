@@ -1,0 +1,151 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .sortable-list {
+            list-style: none;
+            padding: 0;
+            width: 350px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .sortable-item {
+            padding: 15px 20px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: bold;
+            cursor: grab;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .sortable-item:hover {
+            background: #e8f0ff;
+            transform: scale(1.03);
+        }
+        .dragging {
+            opacity: 0.7;
+            transform: rotate(-2deg);
+        }
+        .over {
+            border: 2px dashed #ff8c42;
+            background: #fff3e0;
+        }
+		p {
+			font-size: 1em;
+		}
+    </style>
+	<title>States to Visit</title>
+</head>
+
+<body>
+    <h2>Drag and Drop Sortable List</h2>
+	<p>If you want to save what you have, go to print the page and select save as pdf.</p>
+    <ul class="sortable-list">
+		<li class="sortable-item" draggable="true">Alabama</li>
+		<li class="sortable-item" draggable="true">Alaska</li>
+		<li class="sortable-item" draggable="true">Arizona</li>
+		<li class="sortable-item" draggable="true">Arkansas</li>
+		<li class="sortable-item" draggable="true">California</li>
+		<li class="sortable-item" draggable="true">Colorado</li>
+		<li class="sortable-item" draggable="true">Connecticut</li>
+		<li class="sortable-item" draggable="true">Delaware</li>
+		<li class="sortable-item" draggable="true">Florida</li>
+		<li class="sortable-item" draggable="true">Georgia</li>
+		<li class="sortable-item" draggable="true">Hawaii</li>
+		<li class="sortable-item" draggable="true">Idaho</li>
+		<li class="sortable-item" draggable="true">Illinois</li>
+		<li class="sortable-item" draggable="true">Indiana</li>
+		<li class="sortable-item" draggable="true">Iowa</li>
+		<li class="sortable-item" draggable="true">Kansas</li>
+		<li class="sortable-item" draggable="true">Kentucky</li>
+		<li class="sortable-item" draggable="true">Louisiana</li>
+		<li class="sortable-item" draggable="true">Maine</li>
+		<li class="sortable-item" draggable="true">Maryland</li>
+		<li class="sortable-item" draggable="true">Massachusetts</li>
+		<li class="sortable-item" draggable="true">Michigan</li>
+		<li class="sortable-item" draggable="true">Minnesota</li>
+		<li class="sortable-item" draggable="true">Mississippi</li>
+		<li class="sortable-item" draggable="true">Missouri</li>
+		<li class="sortable-item" draggable="true">Montana</li>
+		<li class="sortable-item" draggable="true">Nebraska</li>
+		<li class="sortable-item" draggable="true">Nevada</li>
+		<li class="sortable-item" draggable="true">New Hampshire</li>
+		<li class="sortable-item" draggable="true">New Jersey</li>
+		<li class="sortable-item" draggable="true">New Mexico</li>
+		<li class="sortable-item" draggable="true">New York</li>
+		<li class="sortable-item" draggable="true">North Carolina</li>
+		<li class="sortable-item" draggable="true">North Dakota</li>
+		<li class="sortable-item" draggable="true">Ohio</li>
+		<li class="sortable-item" draggable="true">Oklahoma</li>
+		<li class="sortable-item" draggable="true">Oregon</li>
+		<li class="sortable-item" draggable="true">Pennsylvania</li>
+		<li class="sortable-item" draggable="true">Rhode Island</li>
+		<li class="sortable-item" draggable="true">South Carolina</li>
+		<li class="sortable-item" draggable="true">South Dakota</li>
+		<li class="sortable-item" draggable="true">Tennessee</li>
+		<li class="sortable-item" draggable="true">Texas</li>
+		<li class="sortable-item" draggable="true">Utah</li>
+		<li class="sortable-item" draggable="true">Vermont</li>
+		<li class="sortable-item" draggable="true">Virginia</li>
+		<li class="sortable-item" draggable="true">Washington</li>
+		<li class="sortable-item" draggable="true">West Virginia</li>
+		<li class="sortable-item" draggable="true">Wisconsin</li>
+		<li class="sortable-item" draggable="true">Wyoming</li>
+	</ul>
+    <script>
+        const list = document.querySelector('.sortable-list');
+        let draggingItem = null;
+        list.addEventListener('dragstart', (e) => {
+            draggingItem = e.target;
+            e.target.classList.add('dragging');
+        });
+        list.addEventListener('dragend', (e) => {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.sortable-item')
+                .forEach(item => item.classList.remove('over'));
+            draggingItem = null;
+        });
+        list.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggingOverItem = getDragAfterElement(list, e.clientY);
+            document.querySelectorAll('.sortable-item').forEach
+                (item => item.classList.remove('over'));
+            if (draggingOverItem) {
+                draggingOverItem.classList.add('over');
+                list.insertBefore(draggingItem, draggingOverItem);
+            } else {
+                list.appendChild(draggingItem); 
+            }
+        });
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll
+                ('.sortable-item:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+    </script>
+</body>
+
+</html>
